@@ -5,14 +5,11 @@ from api import views
 # Additionally, we include the login URLs for the browseable API.
 urlpatterns = patterns('',
     # list of all readings
-    url(r'^api', views.api_root.as_view()),
+    url(r'^api/all', views.api_root.as_view()),
 
     # list of all readings from a single sensor
     url(r'^api/readings/$', views.sensor_reading.as_view()),
 
     # put method to update data
-    url(r'^api/record', views.sensor_recording.as_view()),
-
-    # log-in
-    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/record/(?P<pk>[0-9]+)$', views.sensor_recording.as_view()),
 )

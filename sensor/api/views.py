@@ -51,9 +51,10 @@ def bin_by_hour(readings, hours, start):
                 for reading in readings[start:stop]]) / num)
                 for metric in metrics)
         else:
-            averages = {'novalue': 'true'}
+            averages = {}
 
         averages['time'] = last_hour
+        averages['readings'] = num
         binned_hours.append(averages)
         last_hour -= one_hour
         start = stop
@@ -93,17 +94,16 @@ class sensor_reading(APIView):
 
         # bin the readings by hour
         now = timezone.now()
-        readings = Reading.objects.filter(created__gt=(now -
-                                                       timedelta(hours=hours)))
+        readings = readings.filter(created__gt=(now -
+                                                timedelta(hours=hours)))
         binned_readings = bin_by_hour(readings, hours, now)
         return Response(binned_readings)
 
 
-class sensor_recording(generics.CreateAPIView):
+class sensor_recording(generics.UpdateAPIView):
     """
-    Allows POST operation
+    Allows PUT operation
     """
-
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
