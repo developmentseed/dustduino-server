@@ -11,6 +11,10 @@ from api.metrics import metrics
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 # Attempts int conversion on unicode string
 # return false if it fails
@@ -62,7 +66,7 @@ def bin_by_hour(readings, hours, start):
     return binned_hours
 
 
-class api_root(APIView):
+class ApiRoot(APIView):
     """
     Returns a list of all readings
     """
@@ -72,7 +76,7 @@ class api_root(APIView):
         return Response(serializer.data)
 
 
-class sensor_reading(APIView):
+class Read(APIView):
     """
     Returns a list of readings by a single sensor, or user
     """
@@ -100,14 +104,45 @@ class sensor_reading(APIView):
         return Response(binned_readings)
 
 
-class sensor_recording(generics.UpdateAPIView):
+class JSONResponse(HttpResponse):
     """
-    Allows PUT operation
+    An HttpResponse that renders its content into JSON.
     """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+@csrf_exempt
+def record(request):
+    """
+    Listens for PUT operations
+    """
+
+    if request.method == 'PUT':
+        data = JSONParser().parse(request)
+
+        print request.user
+
+        if request.user.is_authenticated():
+            serializer = ReadingSerializer(data=data)
+        else:
+            print 'no user'
+
+        #if serializer.is_valid():
+            #serializer.save()
+            #return JSONResponse(serializer.data, status=201)
+        #return JSONResponse(serializer.errors, status=400)
+
+        return JSONResponse({}, status=201)
+
+
+class CreateRecord(generics.CreateAPIView):
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                         IsOwnerOrReadOnly,)
+                          IsOwnerOrReadOnly,)
 
     def pre_save(self, obj):
         obj.owner = self.request.user
