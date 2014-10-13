@@ -3,7 +3,7 @@ from django.utils.timezone import now
 
 class Reading(models.Model):
     # Authenticating on user
-    owner = models.ForeignKey('auth.User', related_name='sensors',
+    owner = models.ForeignKey('auth.User', related_name='api',
                               default='')
 
     # When the row gets made

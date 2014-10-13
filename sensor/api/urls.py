@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from sensors import views
+from api import views
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browseable API.

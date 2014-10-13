@@ -3,10 +3,10 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from rest_framework import generics
 
-from sensors.serializers import ReadingSerializer
-from sensors.models import Reading
-from sensors.permissions import IsOwnerOrReadOnly
-from sensors.metrics import metrics
+from api.serializers import ReadingSerializer
+from api.models import Reading
+from api.permissions import IsOwnerOrReadOnly
+from api.metrics import metrics
 
 from datetime import datetime, timedelta
 from django.utils import timezone

@@ -1,6 +1,6 @@
 from django.forms import widgets
 from rest_framework import serializers
-from sensors.models import Reading
+from api.models import Reading
 from django.contrib.auth.models import User
 
 class ReadingSerializer(serializers.ModelSerializer):
