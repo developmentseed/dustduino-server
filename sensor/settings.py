@@ -57,9 +57,7 @@ WSGI_APPLICATION = 'sensor.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': dj_database_url.config()
-    }
+    'default': dj_database_url.config()
 }
 
 # Internationalization
