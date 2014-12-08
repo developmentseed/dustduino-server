@@ -1,0 +1,1 @@
+web: gunicorn sensor.wsgi --log-file -
