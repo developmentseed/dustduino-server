@@ -1,6 +1,7 @@
-sensor/SECRET_KEY.txt
-sensor/db.sqlite3
-sensor/api/migrations
+SECRET_KEY.txt
+db.sqlite3
+api/migrations
+
 
 venv
 
