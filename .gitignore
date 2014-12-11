@@ -2,7 +2,6 @@ SECRET_KEY.txt
 db.sqlite3
 api/migrations
 
-
 venv
 
 # Byte-compiled / optimized / DLL files
