@@ -1,6 +1,6 @@
 ## Installation
 Prequisites:
-- Install and start [Postgres](http://www.postgresql.org/) with a [new database](http://www.postgresql.org/docs/current/static/manage-ag-createdb.html)
+- Install and start [Postgres](http://www.postgresql.org/) with a [new user](http://www.postgresql.org/docs/9.3/static/app-createuser.html) and [new database](http://www.postgresql.org/docs/current/static/manage-ag-createdb.html)
 - Install [Foreman](https://github.com/ddollar/foreman)
 - Clone the repo
 
