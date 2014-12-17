@@ -40,10 +40,10 @@ INSTALLED_APPS = (
     'finalware',
 )
 
-SITE_SUPERUSER_ID = os.environ.get('SITE_SUPERUSER_ID')
+SITE_SUPERUSER_ID = 3221
 SITE_SUPERUSER_USERNAME = 'admin'
 SITE_SUPERUSER_EMAIL = 'admin@example.com'
-SITE_SUPERUSER_PASSWORD = os.environ.get('SITE_SUPERUSER_PASSWORD')
+SITE_SUPERUSER_PASSWORD = 'admin'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

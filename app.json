@@ -10,13 +10,6 @@
     "DJANGO_SECRET_KEY": {
       "description": "Salt for hashing password",
       "generator": "secret"
-    },
-    "SITE_SUPERUSER_ID": {
-      "value": 3423
-    }, 
-    "SITE_SUPERUSER_PASSWORD": {
-      "description": "Password for superuser",
-      "generator": "secret"
     }
   },
   "scripts": {
