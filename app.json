@@ -13,6 +13,6 @@
     }
   },
   "scripts": {
-    "postdeploy": "python manage.py syncdb && python django-admin.py createsuperuser --username admin --email admin@example.com && python django-admin.py changepassword --username admin admin"
+    "postdeploy": "python manage.py syncdb --noinput && python django-admin.py createsuperuser --username admin --email admin@example.com && python django-admin.py changepassword --username admin admin"
   }
 }
