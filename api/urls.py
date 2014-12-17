@@ -1,17 +1,12 @@
-from django.conf.urls import patterns, url, include
-from api import views
+from django.conf.urls import url, include
+from api.views import ReadingViewSet, UserViewSet
+from rest_framework.routers import DefaultRouter
 
-# The API URLs are now determined automatically by the router.
-# Additionally, we include the login URLs for the browseable API.
-urlpatterns = patterns('',
-    # list of all readings
-    url(r'^api/all', views.ApiRoot.as_view()),
+router = DefaultRouter()
+router.register(r'readings', ReadingViewSet)
+router.register(r'users', UserViewSet)
 
-    # list of all readings from a single sensor
-    url(r'^api/readings/$', views.Read.as_view()),
-
-    # put method to update data
-    url(r'^api/record/$', views.record),
-
-    url(r'^api/create/$', views.CreateRecord.as_view()),
-)
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
