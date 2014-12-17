@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+import datetime
 
 class Reading(models.Model):
     # Authenticating on user
