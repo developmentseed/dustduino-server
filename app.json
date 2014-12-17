@@ -12,7 +12,6 @@
       "generator": "secret"
     },
     "SITE_SUPERUSER_ID": {
-      "description": "ID of the admin, should be different from 1",
       "value": 3423
     }, 
     "SITE_SUPERUSER_PASSWORD": {
