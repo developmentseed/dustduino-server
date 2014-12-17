@@ -16,8 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-with open(os.path.join(BASE_DIR, 'SECRET_KEY.txt')) as f:
-    SECRET_KEY = f.read().strip()
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
