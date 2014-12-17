@@ -37,7 +37,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'finalware',
 )
+
+SITE_SUPERUSER_ID = 3423
+SITE_SUPERUSER_USERNAME = 'admin'
+SITE_SUPERUSER_EMAIL = 'admin@example.com'
+SITE_SUPERUSER_PASSWORD = os.environ.get('SITE_SUPERUSER_PASSWORD')
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
