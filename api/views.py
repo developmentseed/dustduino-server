@@ -12,25 +12,16 @@ from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
 import datetime
-import django_filters
-from rest_framework import filters
 
 from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework.parsers import JSONParser
 from StringIO import StringIO
 import json 
 
-# class ReadingFilter(django_filters.FilterSet):
-#     created = django_filters.DateTimeFilter(name="created",lookup_type="gte")
-#     class Meta:
-#         model = Reading
-#         fields = ['created']
 
 class ReadingViewSet(viewsets.ModelViewSet):
     queryset = Reading.objects.all();
     serializer_class = ReadingSerializer
-    # filter_backends = (filters.DjangoFilterBackend,)
-    # filter_class = ReadingFilter
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                             IsOwnerOrReadOnly,)
 
