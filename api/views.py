@@ -5,7 +5,7 @@ from api.serializers import UserSerializer, ReadingSerializer
 from rest_framework import status
 
 from rest_framework import permissions
-from api.permissions import IsOwnerOrReadOnly
+from api.permissions import IsOwnerOrReadOnly, IsUserOrReadOnly
 
 from rest_framework import renderers, viewsets
 from rest_framework.response import Response
@@ -61,9 +61,14 @@ class ReadingViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsUserOrReadOnly,)
 
     def perform_create(self, serializer):
+        instance = serializer.save(password = self.request.DATA['password'])
+        instance.set_password(instance.password)
+        instance.save()
+
+    def perform_update(self, serializer):
         instance = serializer.save(password = self.request.DATA['password'])
         instance.set_password(instance.password)
         instance.save()
