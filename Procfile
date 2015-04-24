@@ -1,1 +1,1 @@
-web: gunicorn sensor.wsgi --log-file -
+web: gunicorn --pythonpath="$PWD/sensor_rest_api" wsgi:application
