@@ -6,6 +6,8 @@ from django.db.models import Avg
 from django.db import transaction
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -72,7 +74,13 @@ class SensorViewSet(viewsets.ModelViewSet):
         description = request.POST.get('description')
 
         # If no email is provided raise an error
-        if not email:
+        if email:
+            try:
+                validate_email(email)
+            except ValidationError:
+                return Response({"error": "Provide a valid email address."},
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
             return Response({"error": "Insufficient information provided."},
                             status=status.HTTP_400_BAD_REQUEST)
 
