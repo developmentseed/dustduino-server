@@ -81,7 +81,7 @@ class Base(Configuration):
 
     # EMAIL CONFIGURATION
     EMAIL_BACKEND = values.Value('django.core.mail.backends.smtp.EmailBackend')
-    DEFAULT_FROM_EMAIL = values.Value('Sensor API <noreply@dexample.com>')
+    DEFAULT_FROM_EMAIL = values.Value('Sensor API <noreply@example.com>')
     # END EMAIL CONFIGURATION
 
     # Static files (CSS, JavaScript, Images)

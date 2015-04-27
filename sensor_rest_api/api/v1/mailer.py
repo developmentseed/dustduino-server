@@ -16,7 +16,7 @@ class VerificaitonEmail(object):
 
     def buildText(self):
         text = 'Hi, \n\n'
-        text += 'You request to register a new sensor is received. Please verify this request by clicking '
+        text += 'Your request to register a new sensor is received. Please verify this request by clicking '
         text += 'on the below link.\n\n'
         text += self.verify_link()
         text += '\n\nThank you!'
@@ -25,7 +25,7 @@ class VerificaitonEmail(object):
 
     def buildHTML(self):
         text = '<p>Hi,</p>'
-        text += '<p>You request to register a new sensor is received. Please verify this request '
+        text += '<p>Your request to register a new sensor is received. Please verify this request '
         text += 'by clicking on the below link.</p>'
         text += '<p><a href="%s">%s</a></p>' % (self.verify_link(), self.verify_link())
         text += '<p>Thank you!</p>'
