@@ -8,7 +8,6 @@ class ReadingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Reading
-        fields = ('url', 'pm10', 'pm25', 'pm10count', 'pm25count', 'created', 'owner', 'createdHour')
 
     def create(self, validated_data):
         return Reading.objects.create(**validated_data)
