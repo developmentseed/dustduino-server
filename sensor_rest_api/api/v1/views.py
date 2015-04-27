@@ -13,6 +13,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import random_name
 
 
@@ -24,6 +25,7 @@ from api.v1.mailer import VerificaitonEmail
 class ReadingViewSet(viewsets.ModelViewSet):
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         instance = serializer.save(owner=self.request.user)
@@ -62,6 +64,7 @@ class ReadingViewSet(viewsets.ModelViewSet):
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def verify_email(self, email):
         # If no email is provided raise an error
