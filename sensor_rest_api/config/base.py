@@ -21,6 +21,8 @@ class Base(Configuration):
 
     BASE_DIR = BASE_DIR
 
+    PORTAL_URL = values.Value('http://127.0.0.1:8000')
+
     INSTALLED_APPS = (
         'django.contrib.admin',
         'corsheaders',
@@ -76,6 +78,11 @@ class Base(Configuration):
     USE_L10N = True
 
     USE_TZ = True
+
+    # EMAIL CONFIGURATION
+    EMAIL_BACKEND = values.Value('django.core.mail.backends.smtp.EmailBackend')
+    DEFAULT_FROM_EMAIL = values.Value('Sensor API <noreply@dexample.com>')
+    # END EMAIL CONFIGURATION
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.7/howto/static-files/

@@ -8,3 +8,7 @@ class Local(Base):
     DEBUG = values.BooleanValue(True)
     TEMPLATE_DEBUG = DEBUG
     # END DEBUG
+
+    # Mail settings
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # End mail settings
