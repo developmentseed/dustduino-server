@@ -12,7 +12,7 @@ class VerificaitonEmail(object):
         self.site_url = settings.PORTAL_URL
 
     def verify_link(self):
-        return '%s?code=%s' % (join(self.site_url, 'api', 'v1', 'verify'), self.code)
+        return '%s?code=%s' % (join(self.site_url, 'verify'), self.code)
 
     def buildText(self):
         text = 'Hi, \n\n'
