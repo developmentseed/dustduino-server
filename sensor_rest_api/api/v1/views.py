@@ -63,20 +63,12 @@ class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
 
-    def create(self, request, *args, **kwargs):
-
-        email = request.POST.get('email')
-        name = request.POST.get('name')
-        lat = request.POST.get('lat')
-        lon = request.POST.get('lon')
-        address = request.POST.get('address')
-        serial = request.POST.get('serial')
-        description = request.POST.get('description')
-
+    def verify_email(self, email):
         # If no email is provided raise an error
         if email:
             try:
                 validate_email(email)
+                return False
             except ValidationError:
                 return Response({"error": "Provide a valid email address."},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -84,8 +76,22 @@ class SensorViewSet(viewsets.ModelViewSet):
             return Response({"error": "Insufficient information provided."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        if not name:
-            name = random_name.generate_name()
+    def create(self, request, *args, **kwargs):
+
+        email = request.POST.get('email')
+        sensor_name = request.POST.get('sensor_name')
+        lat = request.POST.get('lat')
+        lon = request.POST.get('lon')
+        address = request.POST.get('address')
+        serial = request.POST.get('serial')
+        description = request.POST.get('description')
+
+        error = self.verify_email(email)
+        if error:
+            return error
+
+        if not sensor_name:
+            sensor_name = random_name.generate_name()
 
         # If a sensor with the email already exists issue an error
         try:
@@ -104,7 +110,7 @@ class SensorViewSet(viewsets.ModelViewSet):
                 user.save()
 
                 # Add sensor information
-                sensor = Sensor(account=user, sensor_name=name, lat=lat, lon=lon,
+                sensor = Sensor(account=user, sensor_name=sensor_name, lat=lat, lon=lon,
                                 address=address, serial=serial, description=description)
                 sensor.save()
 
@@ -125,3 +131,29 @@ class SensorViewSet(viewsets.ModelViewSet):
                                'Please verify the sensor.',
                 }, status=status.HTTP_201_CREATED)
 
+    def update(self, request, *args, **kwargs):
+
+        email = request.data.pop('email')[0]
+
+        error = self.verify_email(email)
+        if error:
+            return error
+
+        try:
+            user = User.objects.get(email=email)
+
+            if user.is_active:
+                # partial = kwargs.pop('partial', False)
+                instance = Sensor.objects.get(account=user)
+                request.data.account = instance.account
+                print request.data
+                serializer = self.get_serializer(instance, data=request.data, partial=True)
+                serializer.is_valid(raise_exception=True)
+                self.perform_update(serializer)
+                return Response(serializer.data)
+            else:
+                return Response({"error": "The sensor associated with %s is not active." % email},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error": "The email (%s) does not exist" % email},
+                            status=status.HTTP_400_BAD_REQUEST)
