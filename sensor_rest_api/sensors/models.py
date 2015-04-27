@@ -26,3 +26,14 @@ class Reading(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.sensor, self.created)
+
+
+class SensorVerification(models.Model):
+
+    account = models.ForeignKey(User)
+    verification_code = models.CharField('Verification Code', max_length=250)
+    updated = models.DateTimeField(auto_now=True)
+    verified = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return '%s: %s' % (self.account.email, self.verified)
