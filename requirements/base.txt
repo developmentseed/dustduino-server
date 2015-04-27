@@ -11,3 +11,4 @@ psycopg2==2.6
 pytz==2014.7
 static3==0.5.1
 wsgiref==0.1.2
+random_name==0.1.0
