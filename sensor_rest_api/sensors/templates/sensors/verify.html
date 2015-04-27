@@ -1,0 +1,13 @@
+{% extends 'sensors/base.html' %}
+
+{% block content %}
+<!-- Begin page content -->
+  <div class="container">
+    <div class="page-header">
+      <h1>Your Sensor {{verify.account.sensor.sensor_name}} is Verified</h1>
+    </div>
+    <p class="lead">Your API Token is <code>{{token}}</code></p>
+    <p>You can start using the sensor.</p>
+    <p>We also just emailed you the API token.</p>
+  </div>
+{% endblock %}
