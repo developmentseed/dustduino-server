@@ -57,6 +57,15 @@ class Base(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
+    TEMPLATE_DIRS = (
+        join(BASE_DIR, 'templates'),
+    )
+
+    TEMPLATE_LOADERS = (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )
+
     ROOT_URLCONF = 'urls'
 
     WSGI_APPLICATION = 'wsgi.application'
