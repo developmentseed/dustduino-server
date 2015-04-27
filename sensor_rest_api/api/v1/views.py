@@ -2,26 +2,26 @@ import json
 import datetime
 from StringIO import StringIO
 
-from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.db import transaction
 from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib.auth.models import User
 
-from rest_framework import permissions
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 from rest_framework.parsers import JSONParser
+import random_name
 
 
-from api.models import Reading
-from api.serializers import UserSerializer, ReadingSerializer
-from api.permissions import IsOwnerOrReadOnly, IsUserOrReadOnly
+from sensors.models import Reading, Sensor, SensorVerification
+from api.v1.serializers import SensorSerializer, ReadingSerializer
+from api.v1.mailer import VerificaitonEmail
 
 
 class ReadingViewSet(viewsets.ModelViewSet):
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
         instance = serializer.save(owner=self.request.user)
@@ -57,17 +57,63 @@ class ReadingViewSet(viewsets.ModelViewSet):
         return Response(JSONParser().parse(StringIO(data)))
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (IsUserOrReadOnly,)
+class SensorViewSet(viewsets.ModelViewSet):
+    queryset = Sensor.objects.all()
+    serializer_class = SensorSerializer
 
-    def perform_create(self, serializer):
-        instance = serializer.save(password=self.request.DATA['password'])
-        instance.set_password(instance.password)
-        instance.save()
+    def create(self, request, *args, **kwargs):
 
-    def perform_update(self, serializer):
-        instance = serializer.save(password=self.request.DATA['password'])
-        instance.set_password(instance.password)
-        instance.save()
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        lat = request.POST.get('lat')
+        lon = request.POST.get('lon')
+        address = request.POST.get('address')
+        serial = request.POST.get('serial')
+        description = request.POST.get('description')
+
+        # If no email is provided raise an error
+        if not email:
+            return Response({"error": "Insufficient information provided."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if not name:
+            name = random_name.generate_name()
+
+        # If a sensor with the email already exists issue an error
+        try:
+            user = User.objects.get(email=email)
+
+            return Response({"error": "The email %s is already registered with a sensor" % email},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        except User.DoesNotExist:
+            # Creat the new user
+            with transaction.atomic():
+                username = User.objects.make_random_password(length=10)
+                password = User.objects.make_random_password(length=10)
+
+                user = User(username=username, password=password, email=email, is_active=False)
+                user.save()
+
+                # Add sensor information
+                sensor = Sensor(account=user, sensor_name=name, lat=lat, lon=lon,
+                                address=address, serial=serial, description=description)
+                sensor.save()
+
+                # Send Verification email
+                verification_code = User.objects.make_random_password(length=40)
+                verify = SensorVerification(account=user, verification_code=verification_code)
+                verify.save()
+
+                mail = VerificaitonEmail(user.email, verification_code)
+                mail.send()
+
+                return Response({
+                    'email': user.email,
+                    'username': user.username,
+                    'id': user.id,
+                    'verified': verify.verified,
+                    'message': 'New user created. A verification email is sent to the email provided. ' +
+                               'Please verify the sensor.',
+                }, status=status.HTTP_201_CREATED)
+
