@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from api.views import ReadingViewSet, SensorViewSet
+from api.v1.views import ReadingViewSet, SensorViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
