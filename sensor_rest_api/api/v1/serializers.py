@@ -11,5 +11,12 @@ class ReadingSerializer(serializers.ModelSerializer):
 
 class SensorSerializer(serializers.ModelSerializer):
 
+    def to_representation(self, obj):
+        context = super(SensorSerializer, self).to_representation(obj)
+
+        context['last_reading'] = Reading.objects.filter(sensor_id=obj.id).order_by('-created').values().first()
+
+        return context
+
     class Meta:
         model = Sensor
