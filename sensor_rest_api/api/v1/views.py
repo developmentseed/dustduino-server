@@ -33,6 +33,56 @@ class ReadingViewSet(viewsets.ModelViewSet):
         print request.data
         return super(ReadingViewSet, self).create(request, *args, **kwargs)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        queryset = queryset.values('hour_code', 'sensor').annotate(pm10=Avg('pm10'),
+                                                                   pm25=Avg('pm25'),
+                                                                   pm10count=Avg('pm10count'),
+                                                                   pm25count=Avg('pm25count'))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(page)
+
+        return Response(queryset)
+
+
+class SensorViewSet(viewsets.ModelViewSet):
+    queryset = Sensor.objects.all()
+    serializer_class = SensorSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+
+        return Response({"error": "Not Implemented"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+
+        email = request.data.pop('email')
+        if isinstance(email, list):
+            email = email[0]
+
+        error = self.verify_email(email)
+        if error:
+            return error
+
+        try:
+            user = User.objects.get(email=email)
+
+            if user.is_active:
+                instance = Sensor.objects.get(account=user)
+                serializer = self.get_serializer(instance, data=request.data, partial=True)
+                serializer.is_valid(raise_exception=True)
+                self.perform_update(serializer)
+                return Response(serializer.data)
+            else:
+                return Response({"error": "The sensor associated with %s is not active." % email},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error": "The email (%s) does not exist" % email},
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 def verify_email(email):
         # If no email is provided raise an error
@@ -108,39 +158,3 @@ def register_sensor(request):
                     'message': 'New sensor is registered. A verification email is sent to the email provided. ' +
                                'Please verify the sensor.',
                 }, status=status.HTTP_201_CREATED)
-
-
-class SensorViewSet(viewsets.ModelViewSet):
-    queryset = Sensor.objects.all()
-    serializer_class = SensorSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-    def create(self, request, *args, **kwargs):
-
-        return Response({"error": "Not Implemented"}, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self, request, *args, **kwargs):
-
-        email = request.data.pop('email')
-        if isinstance(email, list):
-            email = email[0]
-
-        error = self.verify_email(email)
-        if error:
-            return error
-
-        try:
-            user = User.objects.get(email=email)
-
-            if user.is_active:
-                instance = Sensor.objects.get(account=user)
-                serializer = self.get_serializer(instance, data=request.data, partial=True)
-                serializer.is_valid(raise_exception=True)
-                self.perform_update(serializer)
-                return Response(serializer.data)
-            else:
-                return Response({"error": "The sensor associated with %s is not active." % email},
-                                status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error": "The email (%s) does not exist" % email},
-                            status=status.HTTP_400_BAD_REQUEST)
