@@ -68,7 +68,7 @@ class ReadingViewSet(viewsets.ModelViewSet):
 
 
 class SensorViewSet(viewsets.ModelViewSet):
-    queryset = Sensor.objects.all()
+    queryset = Sensor.objects.filter(account__is_active=True)
     serializer_class = SensorSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
