@@ -1,11 +1,7 @@
-## Installation
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+A REST API for dustDuino air quality sensors
 
-Prequisites:
-- Install and start [Postgres](http://www.postgresql.org/) with a [new user](http://www.postgresql.org/docs/9.3/static/app-createuser.html) and [new database](http://www.postgresql.org/docs/current/static/manage-ag-createdb.html)
-- Install [Foreman](https://github.com/ddollar/foreman)
-- Clone the repo
+## Installation on Local machine
 
 Create a virtual environment
 ```
@@ -13,27 +9,30 @@ virtualenv venv
 source venv/bin/activate
 ```
 
-Install the requirements 
+Install the requirements
 ```
 pip install -r requirements.txt
 ```
 
-Create a secret key
-```
-export DJANGO_SECRET_KEY=`python -c 'import random; import string; print "".join([random.SystemRandom().choice(string.digits + string.letters + string.punctuation) for i in range(100)])'`
-```
-
-Create a database URL for the API (depends on your Postgres database)
-```
-export DATABASE_URL='postgres://{{username}}:{{password}}@localhost:5432/{{database}}'
-```
 
 Initialize the database
 ```
-python manage.py syncdb
+python sensor_rest_api/manage.py syncdb
 ```
 
 Start the server
 ```
-foreman start
+python sensor_rest_api/manage.py runserver
 ```
+
+## Deployment to Heroku
+
+Use the automated process:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+Or manaually create an app on heroku and deploy. For configuration purposes, the following table maps environment variables to their Django setting:
+
+|Environment Variable                    |Django Setting              |Development Default          |Production Default
+| -------------------------------------- | -------------------------- | --------------------------- | -----------------
+|DJANGO_SECRET_KEY                       |SECRET_KEY                  |CHANGEME!!!                                    |raises error

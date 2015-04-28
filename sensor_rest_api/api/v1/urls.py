@@ -1,12 +1,12 @@
 from django.conf.urls import url, include
-from api.views import ReadingViewSet, UserViewSet
+from api.v1.views import ReadingViewSet, SensorViewSet, register_sensor
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'readings', ReadingViewSet)
-router.register(r'users', UserViewSet)
+router.register(r'sensors', SensorViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^register/$', register_sensor)
 ]
