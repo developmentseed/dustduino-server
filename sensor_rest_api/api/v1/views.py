@@ -79,7 +79,7 @@ def register_sensor(request):
 
     if request.method == 'POST':
 
-        email = request.POST.pop('email')
+        email = request.POST.get('email')
         if isinstance(email, list):
             email = email[0]
 
