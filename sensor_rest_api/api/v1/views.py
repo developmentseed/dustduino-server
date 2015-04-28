@@ -9,11 +9,11 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import list_route, api_view
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import random_name
 
 
@@ -79,7 +79,10 @@ def register_sensor(request):
 
     if request.method == 'POST':
 
-        email = request.POST.get('email')
+        email = request.POST.pop('email')
+        if isinstance(email, list):
+            email = email[0]
+
         sensor_name = request.POST.get('sensor_name')
         lat = request.POST.get('lat')
         lon = request.POST.get('lon')
