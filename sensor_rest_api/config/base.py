@@ -25,12 +25,12 @@ class Base(Configuration):
 
     INSTALLED_APPS = (
         'django.contrib.admin',
-        'corsheaders',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'corsheaders',
         'rest_framework',
         'rest_framework.authtoken',
         'api',
@@ -101,11 +101,22 @@ class Base(Configuration):
     # Django CORS
 
     CORS_ORIGIN_ALLOW_ALL = values.BooleanValue(True)
-    CORS_URLS_REGEX = r'^/v[0-9]/.*$'
     CORS_ALLOW_METHODS = (
         'GET',
         'POST',
         'PUT',
+        'PATCH',
+        'OPTIONS'
+    )
+
+    CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken',
+        'accept-encoding'
     )
     # End Django CORS
 
