@@ -56,10 +56,10 @@ class ReadingViewSet(viewsets.ModelViewSet):
             except ValueError:
                 pass
 
-        queryset = queryset.values('hour_code', 'sensor').annotate(pm10=Avg('pm10'),
-                                                                   pm25=Avg('pm25'),
-                                                                   pm10count=Avg('pm10count'),
-                                                                   pm25count=Avg('pm25count'))
+        queryset = queryset.values('hour_code', 'sensor').order_by('-hour_code').annotate(pm10=Avg('pm10'),
+                                                                                          pm25=Avg('pm25'),
+                                                                                          pm10count=Avg('pm10count'),
+                                                                                          pm25count=Avg('pm25count'))
 
         page = self.paginate_queryset(queryset)
         if page is not None:
