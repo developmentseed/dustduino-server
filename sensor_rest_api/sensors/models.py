@@ -19,10 +19,16 @@ class Sensor(models.Model):
 class Reading(models.Model):
     sensor = models.ForeignKey(Sensor)
     created = models.DateTimeField(auto_now_add=True)
+    hour_code = models.CharField('Hour Code', null=True, blank=True, max_length=100)
     pm10 = models.IntegerField(default=0, null=True, blank=True)
     pm25 = models.IntegerField(default=0, null=True, blank=True)
     pm10count = models.IntegerField(default=0, null=True, blank=True)
     pm25count = models.IntegerField(default=0, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+
+        self.hour_code = self.created.strftime('%Y%m%d%H')
+        super(Reading, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return '%s: %s' % (self.sensor, self.created)
