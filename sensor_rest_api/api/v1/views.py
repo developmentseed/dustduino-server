@@ -9,11 +9,11 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, api_view
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 import random_name
 
 
@@ -42,7 +42,6 @@ class ReadingViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(owner__username__in=users)
         if created:
             date = [int(num) for num in created.split('-')]
-            print date
             date = datetime.datetime(date[0], date[1], date[2])
             queryset = queryset.filter(created__gte=date)
         return queryset
@@ -61,12 +60,7 @@ class ReadingViewSet(viewsets.ModelViewSet):
         return Response(JSONParser().parse(StringIO(data)))
 
 
-class SensorViewSet(viewsets.ModelViewSet):
-    queryset = Sensor.objects.all()
-    serializer_class = SensorSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-    def verify_email(self, email):
+def verify_email(email):
         # If no email is provided raise an error
         if email:
             try:
@@ -79,7 +73,11 @@ class SensorViewSet(viewsets.ModelViewSet):
             return Response({"error": "Insufficient information provided."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    def create(self, request, *args, **kwargs):
+
+@api_view(['POST'])
+def register_sensor(request):
+
+    if request.method == 'POST':
 
         email = request.POST.get('email')
         sensor_name = request.POST.get('sensor_name')
@@ -89,7 +87,7 @@ class SensorViewSet(viewsets.ModelViewSet):
         serial = request.POST.get('serial')
         description = request.POST.get('description')
 
-        error = self.verify_email(email)
+        error = verify_email(email)
         if error:
             return error
 
@@ -130,13 +128,25 @@ class SensorViewSet(viewsets.ModelViewSet):
                     'username': user.username,
                     'id': user.id,
                     'verified': verify.verified,
-                    'message': 'New user created. A verification email is sent to the email provided. ' +
+                    'message': 'New sensor is registered. A verification email is sent to the email provided. ' +
                                'Please verify the sensor.',
                 }, status=status.HTTP_201_CREATED)
 
+
+class SensorViewSet(viewsets.ModelViewSet):
+    queryset = Sensor.objects.all()
+    serializer_class = SensorSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+
+        return Response({"error": "Not Implemented"}, status=status.HTTP_400_BAD_REQUEST)
+
     def update(self, request, *args, **kwargs):
 
-        email = request.data.pop('email')[0]
+        email = request.data.pop('email')
+        if isinstance(email, list):
+            email = email[0]
 
         error = self.verify_email(email)
         if error:
@@ -146,10 +156,7 @@ class SensorViewSet(viewsets.ModelViewSet):
             user = User.objects.get(email=email)
 
             if user.is_active:
-                # partial = kwargs.pop('partial', False)
                 instance = Sensor.objects.get(account=user)
-                request.data.account = instance.account
-                print request.data
                 serializer = self.get_serializer(instance, data=request.data, partial=True)
                 serializer.is_valid(raise_exception=True)
                 self.perform_update(serializer)
