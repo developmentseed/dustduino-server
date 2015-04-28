@@ -1,21 +1,15 @@
-import json
-import datetime
-from StringIO import StringIO
-
 from django.db.models import Avg
 from django.db import transaction
-from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import list_route, api_view
-from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import random_name
-
+from dateutil.parser import parse
 
 from sensors.models import Reading, Sensor, SensorVerification
 from api.v1.serializers import SensorSerializer, ReadingSerializer
@@ -35,6 +29,31 @@ class ReadingViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+
+        sensor_id = request.GET.get('sensor_id', None)
+        email = request.GET.get('email', None)
+        start = request.GET.get('start', None)
+        end = request.GET.get('end', None)
+
+        if sensor_id:
+            queryset = queryset.filter(sensor_id=sensor_id)
+
+        if email:
+            queryset = queryset.filter(sensor__account__email=email)
+
+        if start:
+            try:
+                start = parse(start)
+                queryset = queryset.filter(created__gte=start)
+            except ValueError:
+                pass
+
+        if end:
+            try:
+                end = parse(end)
+                queryset = queryset.filter(created__lte=end)
+            except ValueError:
+                pass
 
         queryset = queryset.values('hour_code', 'sensor').annotate(pm10=Avg('pm10'),
                                                                    pm25=Avg('pm25'),
