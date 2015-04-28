@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Sensor(models.Model):
@@ -25,11 +27,6 @@ class Reading(models.Model):
     pm10count = models.IntegerField(default=0, null=True, blank=True)
     pm25count = models.IntegerField(default=0, null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-
-        self.hour_code = self.created.strftime('%Y%m%d%H')
-        super(Reading, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return '%s: %s' % (self.sensor, self.created)
 
@@ -43,3 +40,12 @@ class SensorVerification(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.account.email, self.verified)
+
+
+@receiver(post_save)
+def add_hour_code(sender, instance, created, raw, using, update_fields, **kwargs):
+    """ Generate a string from datetime and add to hour_code based on the created time """
+
+    if not instance.hour_code:
+        instance.hour_code = instance.created.strftime('%Y%m%d%H')
+        instance.save()

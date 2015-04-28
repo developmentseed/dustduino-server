@@ -27,37 +27,11 @@ class ReadingViewSet(viewsets.ModelViewSet):
     serializer_class = ReadingSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
-    def perform_create(self, serializer):
-        instance = serializer.save(owner=self.request.user)
-        hour = instance.created - datetime.timedelta(seconds=60*instance.created.minute + instance.created.second,
-                                                     microseconds=instance.created.microsecond)
-        serializer.save(createdHour=hour)
-
-    def get_queryset(self):
-        queryset = Reading.objects.all()
-        users = self.request.QUERY_PARAMS.get('users', None)
-        created = self.request.QUERY_PARAMS.get('created', None)
-        if users:
-            users = users.split(',')
-            queryset = queryset.filter(owner__username__in=users)
-        if created:
-            date = [int(num) for num in created.split('-')]
-            date = datetime.datetime(date[0], date[1], date[2])
-            queryset = queryset.filter(created__gte=date)
-        return queryset
-
-    @list_route()
-    def aggregate(self, request):
-        queryset = self.get_queryset()
-        aggData = queryset.values('createdHour').order_by().annotate(
-            pm10=Avg('pm10'),
-            pm25=Avg('pm25'),
-            pm10count=Avg('pm10count'),
-            pm25coun=Avg('pm25count')
-        )
-
-        data = json.dumps(list(aggData), cls=DjangoJSONEncoder)
-        return Response(JSONParser().parse(StringIO(data)))
+    def create(self, request, *args, **kwargs):
+        sensor = Sensor.objects.get(account=request.user)
+        request.data.__setitem__('sensor', sensor.id)
+        print request.data
+        return super(ReadingViewSet, self).create(request, *args, **kwargs)
 
 
 def verify_email(email):
