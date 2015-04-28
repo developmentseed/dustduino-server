@@ -54,6 +54,9 @@
             {% block breadcrumbs %}
                 <ul class="breadcrumb">
                     {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+                        {% if forloop.first %}
+                            <li><a href="/">Documentation</a></li>
+                        {% endif %}
                         {% if forloop.last %}
                             <li class="active"><a href="{{ breadcrumb_url }}">{{ breadcrumb_name }}</a></li>
                         {% else %}

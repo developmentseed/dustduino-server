@@ -24,6 +24,7 @@ class ReadingViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         sensor = Sensor.objects.get(account=request.user)
         request.data.__setitem__('sensor', sensor.id)
+
         print request.data
         return super(ReadingViewSet, self).create(request, *args, **kwargs)
 
