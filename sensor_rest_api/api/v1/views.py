@@ -83,7 +83,7 @@ class SensorViewSet(viewsets.ModelViewSet):
         if isinstance(email, list):
             email = email[0]
 
-        error = self.verify_email(email)
+        error = verify_email(email)
         if error:
             return error
 

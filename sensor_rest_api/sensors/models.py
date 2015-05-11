@@ -42,7 +42,7 @@ class SensorVerification(models.Model):
         return '%s: %s' % (self.account.email, self.verified)
 
 
-@receiver(post_save)
+@receiver(post_save, sender=Reading)
 def add_hour_code(sender, instance, created, raw, using, update_fields, **kwargs):
     """ Generate a string from datetime and add to hour_code based on the created time """
 
