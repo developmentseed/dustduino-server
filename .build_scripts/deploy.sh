@@ -6,7 +6,7 @@ if [ $TRAVIS_PULL_REQUEST = "false" ] && [ $TRAVIS_BRANCH = "master" ]; then
   echo "Get ready, we're publishing!"
   npm install -g aglio
   mkdir -p dist
-  aglio -t slate -i docs/docs.md -o dist/output.html
+  aglio -t slate -i docs/docs.md -o dist/index.html
   cd dist
   echo ".DS_Store" > .gitignore
   git init
