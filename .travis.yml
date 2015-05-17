@@ -1,0 +1,14 @@
+language: python
+python:
+- '2.7'
+
+env:
+  global:
+  - GH_REF=github.com/developmentseed/dustduino-server.git
+  - secure: IcLbFaMe4sIwFdwlWG7ZFiSdVIK0UzYrPPltIcKOMT6p3qw37KOjL7+WtuW3OkG3tAtl1tB2OLkQaHjPa+C2tZT6pprkA+3W+0fs5vECRCJW+Kq4CFTp32s323AxR1bUAwyw8/F4f2UfmnhrCYlcR/P8IqTkUI2lUSpbMwd+Jn8=
+
+before_install:
+- chmod +x ./.build_scripts/deploy.sh
+
+after_success:
+- "./.build_scripts/deploy.sh"
