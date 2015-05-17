@@ -15,8 +15,6 @@ install: echo 'no install'
 
 script: echo 'no scripts'
 
-before_install:
-- chmod +x ./.build_scripts/deploy.sh
+before_install: chmod +x ./.build_scripts/deploy.sh
 
-after_success:
-- "./.build_scripts/deploy.sh"
+after_success: ./.build_scripts/deploy.sh
