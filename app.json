@@ -1,18 +1,20 @@
 {
   "name": "Sensor REST Api",
   "description": "REST API for dustDuino air quality sensors",
-  "repository": "https://github.com/developmentseed/sensor-rest-api/tree/development",
+  "repository": "https://github.com/developmentseed/dustduino-server",
   "keywords": [ "django", "arduino", "REST", "sensor" ],
   "addons": [
-    "heroku-postgresql:hobby-dev"
+    "heroku-postgresql:hobby-dev",
+    "heroku addons:create sendgrid:starter",
   ],
   "env": {
     "DJANGO_SECRET_KEY": {
       "description": "Salt for hashing password",
+      "required": true,
       "generator": "secret"
     }
   },
   "scripts": {
-    "postdeploy": "python manage.py syncdb"
+    "postdeploy": "python sensor_rest_api/manage.py syncdb"
   }
 }

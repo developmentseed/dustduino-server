@@ -3,6 +3,8 @@ A REST API for DustDuino air quality sensors
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
+For API documentation [click here](http://devseed.com/dustduino-server/).
+
 ## Deployment to Heroku
 
 Use the heroku button above or manually create an app on heroku and deploy. For configuration purposes, the following table maps environment variables to their Django setting:
@@ -10,6 +12,7 @@ Use the heroku button above or manually create an app on heroku and deploy. For 
 |Environment Variable                    |Django Setting              |Development Default          |Production Default
 | -------------------------------------- | -------------------------- | --------------------------- | -----------------
 |DJANGO_SECRET_KEY                       |SECRET_KEY                  |CHANGEME!!!                                    |raises error
+|DJANGO_PORTAL_URL                       |PORTAL_URL                  |http://127.0.0.1:8000                                    |http://127.0.0.1:8000
 
 ## Installation on local machine
 
