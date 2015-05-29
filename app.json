@@ -4,8 +4,8 @@
   "repository": "https://github.com/developmentseed/dustduino-server",
   "keywords": [ "django", "arduino", "REST", "sensor" ],
   "addons": [
-    "heroku-postgresql:hobby-dev",
-    "sendgrid:starter"
+    "heroku-postgresql",
+    "sendgrid"
   ],
   "env": {
     "DJANGO_SECRET_KEY": {
