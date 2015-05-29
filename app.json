@@ -5,7 +5,7 @@
   "keywords": [ "django", "arduino", "REST", "sensor" ],
   "addons": [
     "heroku-postgresql:hobby-dev",
-    "heroku addons:create sendgrid:starter"
+    "sendgrid:starter"
   ],
   "env": {
     "DJANGO_SECRET_KEY": {
