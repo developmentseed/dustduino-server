@@ -22,7 +22,7 @@ class Base(Configuration):
     BASE_DIR = BASE_DIR
 
     PORTAL_URL = values.Value('http://127.0.0.1:8000')
-    DOCS_URL = values.Value('http://docs.sensorrestapi.apiary.io/#reference')
+    DOCS_URL = values.Value('https://developmentseed.org/dustduino-server/')
 
     INSTALLED_APPS = (
         'django.contrib.admin',
