@@ -1,0 +1,272 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>A REST API for Sensor Data</title><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/slate/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow Night Eighties */
+pre{color:#fff;background:#272b30;border:1px solid rgba(255, 255, 255, 0.2)}
+pre code{display:block;padding:.5em;background:#272b30}
+.hljs-comment,.hljs-title{color:#999}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#f2777a}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f99157}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#fc6}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#9c9}.css .hljs-hexcolor{color:#6cc}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#69c}.hljs-keyword,.javascript .hljs-function{color:#c9c}.hljs{display:block;background:#2d2d2d;color:#ccc;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+h4,
+h5 {
+  font-family: 'Roboto' sans-serif !important;
+}
+h1,
+h2,
+h3,
+.aglio {
+  font-family: 'Raleway' sans-serif !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a {
+  display: none;
+}
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a {
+  display: inline;
+}
+code {
+  color: #222;
+  background-color: #aaa;
+  font-family: 'Inconsolata' monospace !important;
+}
+a[data-target] {
+  cursor: pointer;
+}
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.back-to-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 24px;
+  padding: 4px 8px;
+  color: #aaa;
+  background-color: #171b20;
+  text-decoration: none !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel {
+  overflow: hidden;
+}
+.panel-heading code {
+  margin-left: 3px;
+  color: #000;
+  background-color: rgba(255,255,255,0.7);
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.panel-heading h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+a.list-group-item:hover {
+  background-color: #f8f8f8;
+  border-left: 2px solid #555;
+  padding-left: 15px;
+}
+.indent {
+  display: block;
+  text-indent: 16px;
+}
+.list-group-item {
+  padding-left: 16px;
+}
+.list-group-item .toggle .open {
+  display: block;
+}
+.list-group-item .toggle .closed {
+  display: none;
+}
+.list-group-item.collapsed .toggle .open {
+  display: none;
+}
+.list-group-item.collapsed .toggle .closed {
+  display: block;
+}
+a.list-group-item:hover {
+  background-color: #4b5159;
+  border-left-color: #c8c8c8;
+}
+a.list-group-item {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+a.list-group-item.heading {
+  font-size: 15px;
+  background-color: #3e444c;
+}
+a.list-group-item.heading:hover {
+  background-color: #4b5159;
+}
+.list-group-item.collapse {
+  display: none;
+}
+.list-group-item.collapse.in {
+  display: block;
+}
+.list-group-item a span.closed {
+  display: none;
+}
+.list-group-item a span.open {
+  display: block;
+}
+.list-group-item a.collapsed span.closed {
+  display: block;
+}
+.list-group-item a.collapsed span.open {
+  display: none;
+}
+#nav {
+  width: inherit;
+  margin-top: 38px;
+  max-width: 255px;
+  top: 0;
+  bottom: 0;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+}
+@media (max-width: 1199px) {
+  #nav {
+    max-width: 212px;
+  }
+}
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#-menu" href="#" class="list-group-item heading collapsed">Resource Group</a><div id="-menu"><a href="#-the-api-root" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>The API Root</a><a href="#-readings" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Readings</a><a href="#-readings-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Retrieve Readings List</span></a><a href="#-readings-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Create a New Reading</span></a><a href="#-sensors" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Sensors</a></div></div><p style="text-align: center; word-wrap: break-word;"><a href="https://brazil-sensor.herokuapp.com">https://brazil-sensor.herokuapp.com</a></p></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">A REST API for Sensor Data</h1></div></header><div class="description"><p><a href="https://brazil-sensor.herokuapp.com/api/v1/">This REST API</a> collects data from dustDuino air sensors and allow users to query them.</p>
+</div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="">Resource Group&nbsp;<a href="#"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="-the-api-root">The API Root&nbsp;<a href="#-the-api-root"><i class="fa fa-link"></i></a></h4><p>This resource does not have any attributes. Instead it offers the initial
+API affordances in the form of the links in the JSON body.</p>
+<p>It is recommend to follow the “url” link values,
+<a href="https://tools.ietf.org/html/rfc5988">Link</a> or Location headers where
+applicable to retrieve resources. Instead of constructing your own URLs,
+to keep your client decoupled from implementation details.</p>
+<section id="-the-api-root-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve the Entry Point</span></div><div style="float:left"><a href="#-the-api-root-get" class="btn btn-xs btn-info">GET</a></div><div style="overflow:hidden"><code>/api/v1</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#b42b922e3b0f3c046ed30ac515c83b3d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b42b922e3b0f3c046ed30ac515c83b3d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">readings</span>": <span class="hljs-value"><span class="hljs-string">"http://brazil-sensor.herokuapp.com/api/v1/readings/"</span></span>,
+    "<span class="hljs-attribute">sensors</span>": <span class="hljs-value"><span class="hljs-string">"http://brazil-sensor.herokuapp.com/api/v1/sensors/"</span>
+</span>}
+</code></pre></li></ul></section><h4 id="-readings">Readings&nbsp;<a href="#-readings"><i class="fa fa-link"></i></a></h4><h3>List readings</h3>
+<p>Returns all readings from sensors. Please note that the readings are returned per hour. Each fields is the average value of readings during the hour.</p>
+<p>A reading object has the following attributes:</p>
+<ul>
+<li><p><code>pm10</code> - Particulate matter smaller than about 10 micrometers</p></li>
+<li><p><code>pm25</code> - Particulate matter smaller than about 25 micrometers</p></li>
+<li><p><code>pm10count</code> - Particulate matter counter for paricles smaller than about 10 micrometers</p></li>
+<li><p><code>pm25count</code> - Particulate matter counter for paricles smaller than about 25 micrometers</p></li>
+<li><p><code>sensor</code> - Sensor ID</p></li>
+<li><p><code>hour_code</code> - The hour in which the reading average is calculated | format: YYYYMMDDHH</p></li>
+</ul>
+<section id="-readings-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Readings List</span></div><div style="float:left"><a href="#-readings-get" class="btn btn-xs btn-info">GET</a></div><div style="overflow:hidden"><code>/api/v1/readings/{?sensor_id,email,start,end}</code></div></div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>sensor_id</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID for a particular sensor</p>
+</dd><dt>email</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>email@example.com</span></span><p>email address with which the sensor is registered</p>
+</dd><dt>start</dt><dd><code>date</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2014-12-31</span></span><p>The start date for readings | format: YYYY-MM-DD</p>
+</dd><dt>end</dt><dd><code>date</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2015-12-31</span></span><p>The end date for readings | format: YYYY-MM-DD</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#ae1bd8efd6d873fc99a00fb9834f3264" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="ae1bd8efd6d873fc99a00fb9834f3264" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">next</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">previous</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">results</span>": <span class="hljs-value">[
+        {
+            "<span class="hljs-attribute">pm25count</span>": <span class="hljs-value"><span class="hljs-number">0.0</span></span>,
+            "<span class="hljs-attribute">pm10</span>": <span class="hljs-value"><span class="hljs-number">1.0</span></span>,
+            "<span class="hljs-attribute">pm10count</span>": <span class="hljs-value"><span class="hljs-number">3.0</span></span>,
+            "<span class="hljs-attribute">hour_code</span>": <span class="hljs-value"><span class="hljs-string">"2015042818"</span></span>,
+            "<span class="hljs-attribute">sensor</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+            "<span class="hljs-attribute">pm25</span>": <span class="hljs-value"><span class="hljs-number">2.0</span>
+        </span>},
+        {
+            "<span class="hljs-attribute">pm25count</span>": <span class="hljs-value"><span class="hljs-number">7.0</span></span>,
+            "<span class="hljs-attribute">pm10</span>": <span class="hljs-value"><span class="hljs-number">6.0</span></span>,
+            "<span class="hljs-attribute">pm10count</span>": <span class="hljs-value"><span class="hljs-number">3.0</span></span>,
+            "<span class="hljs-attribute">hour_code</span>": <span class="hljs-value"><span class="hljs-string">"2015042819"</span></span>,
+            "<span class="hljs-attribute">sensor</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+            "<span class="hljs-attribute">pm25</span>": <span class="hljs-value"><span class="hljs-number">2.0</span>
+        </span>},
+        {
+            "<span class="hljs-attribute">pm25count</span>": <span class="hljs-value"><span class="hljs-number">100.0</span></span>,
+            "<span class="hljs-attribute">pm10</span>": <span class="hljs-value"><span class="hljs-number">1.0</span></span>,
+            "<span class="hljs-attribute">pm10count</span>": <span class="hljs-value"><span class="hljs-number">300.0</span></span>,
+            "<span class="hljs-attribute">hour_code</span>": <span class="hljs-value"><span class="hljs-string">"2015042820"</span></span>,
+            "<span class="hljs-attribute">sensor</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+            "<span class="hljs-attribute">pm25</span>": <span class="hljs-value"><span class="hljs-number">45.0</span>
+        </span>}
+    ]
+</span>}
+</code></pre></li></ul></section><section id="-readings-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create a New Reading</span></div><div style="float:left"><a href="#-readings-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/api/v1/readings/{?sensor_id,email,start,end}</code></div></div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>pm10</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>Particulate matter smaller than about 10 micrometers</p>
+</dd><dt>pm25</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>Particulate matter smaller than about 25 micrometers</p>
+</dd><dt>pm10count</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>Particulate matter counter for paricles smaller than about 10 micrometers</p>
+</dd><dt>pm25count</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>Particulate matter counter for paricles smaller than about 25 micrometers</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#fc8490b39731f687448b747fe1b0ebe4" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="fc8490b39731f687448b747fe1b0ebe4" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Token yourtoken</span><br></code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#f3970662405b353b5e9076b532be5d51" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="f3970662405b353b5e9076b532be5d51" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+    "<span class="hljs-attribute">created</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-28T19:43:20.141296Z"</span></span>,
+    "<span class="hljs-attribute">hour_code</span>": <span class="hljs-value"><span class="hljs-string">"2015042819"</span></span>,
+    "<span class="hljs-attribute">pm10</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
+    "<span class="hljs-attribute">pm25</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+    "<span class="hljs-attribute">pm10count</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
+    "<span class="hljs-attribute">pm25count</span>": <span class="hljs-value"><span class="hljs-number">130</span></span>,
+    "<span class="hljs-attribute">sensor</span>": <span class="hljs-value"><span class="hljs-number">3</span>
+</span>}
+</code></pre></li></ul></section><h4 id="-sensors">Sensors&nbsp;<a href="#-sensors"><i class="fa fa-link"></i></a></h4><p>Returns the list of active sensors.</p>
+<p>A sensor object has the following attributes:</p>
+<ul>
+<li><p><code>id</code> - unique sensor ID</p></li>
+<li><p><code>sensor_name</code> - sensor’s name</p></li>
+<li><p><code>lat</code> - sensor’s latitude</p></li>
+<li><p><code>lon</code> - sensor’s longitude</p></li>
+<li><p><code>address</code> - sensor’s address</p></li>
+<li><p><code>serial</code> - sensor’s serial number</p></li>
+<li><p><code>description</code> - sensor’s description</p></li>
+<li><p><code>account</code> - user account associated with the sensor</p></li>
+<li><p><code>last_reading</code> - the latest reading object</p></li>
+</ul>
+<section id="-sensors-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">View Sensors List</span></div><div style="float:left"><a href="#-sensors-get" class="btn btn-xs btn-info">GET</a></div><div style="overflow:hidden"><code>/api/v1/sensors/{sensor_id}</code></div></div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>sensor_id</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>sensor unique ID</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#09dd976f37253e5f1fb8eaa079113066" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="09dd976f37253e5f1fb8eaa079113066" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
+    "<span class="hljs-attribute">next</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">previous</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">results</span>": <span class="hljs-value">[
+        {
+            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+            "<span class="hljs-attribute">sensor_name</span>": <span class="hljs-value"><span class="hljs-string">"jumpy-bronze-mongrel"</span></span>,
+            "<span class="hljs-attribute">lat</span>": <span class="hljs-value">-<span class="hljs-number">23.55187083133668</span></span>,
+            "<span class="hljs-attribute">lon</span>": <span class="hljs-value">-<span class="hljs-number">46.65361404418945</span></span>,
+            "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+            "<span class="hljs-attribute">serial</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+            "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Enter a description of your device"</span></span>,
+            "<span class="hljs-attribute">account</span>": <span class="hljs-value"><span class="hljs-number">7</span></span>,
+            "<span class="hljs-attribute">last_reading</span>": <span class="hljs-value">{
+                "<span class="hljs-attribute">sensor_id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+                "<span class="hljs-attribute">pm25count</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>,
+                "<span class="hljs-attribute">pm10</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
+                "<span class="hljs-attribute">created</span>": <span class="hljs-value"><span class="hljs-string">"2015-04-28T19:52:17.836Z"</span></span>,
+                "<span class="hljs-attribute">pm10count</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+                "<span class="hljs-attribute">hour_code</span>": <span class="hljs-value"><span class="hljs-string">"2015042819"</span></span>,
+                "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+                "<span class="hljs-attribute">pm25</span>": <span class="hljs-value"><span class="hljs-number">2</span>
+            </span>}
+        </span>}
+    ]
+</span>}
+</code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 10 Jun 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
+  if (location.protocol === 'file:') {
+    document.getElementById('localFile').style.display = 'block';
+  }
+
+}).call(this);
+</script><script>(function() {
+  $('table').addClass('table');
+
+}).call(this);
+</script></html>
