@@ -10,6 +10,7 @@ class Production(Base):
     SECRET_KEY = values.SecretValue()
 
     INSTALLED_APPS += ("gunicorn", )
+    ALLOWED_HOSTS = ['*']
 
     # EMAIL
     EMAIL_HOST = values.Value('smtp.sendgrid.com')

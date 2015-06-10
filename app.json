@@ -15,6 +15,6 @@
     }
   },
   "scripts": {
-    "postdeploy": "python sensor_rest_api/manage.py syncdb"
+    "postdeploy": "python sensor_rest_api/manage.py syncdb --noinput"
   }
 }
