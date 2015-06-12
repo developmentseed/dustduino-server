@@ -6,11 +6,6 @@ branches:
   only:
     - master
 
-env:
-  global:
-  - GH_REF=github.com/developmentseed/dustduino-server.git
-  - secure: CbzgND/x3QGeJmVIpLpjuHMn9SFuRkpyWL65KjLanM7k+h86JfmeYaOxnL/6yXYeh6klzYOq8lBQQZayfC9Pre0acrucNB0vyRBLfoW7zeUWeIuQ9Nz1JpjDNNtovDz19mpP8JxzsvzoWdIsfvT8hfeN1/P2a5V+lzZGn50c/9I=
-
 install: echo 'no install'
 
 script: echo 'no scripts'

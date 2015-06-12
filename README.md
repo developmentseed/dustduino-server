@@ -3,7 +3,7 @@ A REST API for DustDuino air quality sensors
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-For API documentation [click here](http://devseed.com/dustduino-server/).
+For API documentation [click here](http://api.opendustmap.com).
 
 ## Deployment to Heroku
 
@@ -36,3 +36,9 @@ Start the server
 ```
 python sensor_rest_api/manage.py runserver
 ```
+## Docs Deployment
+
+This project is set up with [Travis](https://travis-ci.org/) deploy scripts already included which will deploy documentation to `gh-pages`. To utilize these, you will need to enable the repo on the Travis system and include the following two environment variables.
+
+- **GH_REF** - the URL of the repo, similar to `github.com/developmentseed/dustduino-server.git`
+- **GH_TOKEN** - a GitHub personal access token available from https://github.com/settings/tokens
